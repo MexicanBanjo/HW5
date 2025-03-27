@@ -33,14 +33,14 @@ class ProblemSolutions {
     public boolean isSubset(int list1[], int list2[]) {
         Set<Integer> set = new HashSet<>();
             for (int num : list1) {
-                set.add(num);
+                set.add(num); // Store all elements of list1 in a HashSet for fast lookup
              }
             for (int num : list2) {
-                if (!set.contains(num)) {
+                if (!set.contains(num)) { // Check if each element in list2 exists in set
                     return false;
                 }
             }
-            return true;
+            return true; // If all elements of list2 are found, return true
     }
 
 
@@ -58,14 +58,14 @@ class ProblemSolutions {
      */
 
     public int findKthLargest(int[] array, int k) {
-        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>(); // Min heap to store k largest elements
         for (int num : array) {
-            minHeap.add(num);
+            minHeap.add(num); // Add element to the heap
             if (minHeap.size() > k) {
-                minHeap.poll();
+                minHeap.poll(); // Remove smallest element if heap size exceeds k
             }
         }
-        return minHeap.poll();
+        return minHeap.poll(); // The root of the heap is the k-th largest element
     }
 
 
@@ -83,10 +83,10 @@ class ProblemSolutions {
      */
 
     public int[] sort2Arrays(int[] array1, int[] array2) {
-        int[] mergedArray = new int[array1.length + array2.length];
-        System.arraycopy(array1, 0, mergedArray, 0, array1.length);
-        System.arraycopy(array2, 0, mergedArray, array1.length, array2.length);
-        Arrays.sort(mergedArray);
+        int[] mergedArray = new int[array1.length + array2.length]; // Create array to store both arrays
+        System.arraycopy(array1, 0, mergedArray, 0, array1.length); // Copy array1 into mergedArray
+        System.arraycopy(array2, 0, mergedArray, array1.length, array2.length); // Copy array2 into mergedArray
+        Arrays.sort(mergedArray); // Sort the merged array
         return mergedArray;
     }
 
