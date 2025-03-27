@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Edwin Johnson / 001
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -245,12 +245,38 @@ public class CuckooHash<K, V> {
 	 */
 
  	public void put(K key, V value) {
+		int pos1 = hash1(key);
+		int pos2 = hash2(key);
 
-		// ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME AT TOP OF FILE.
-		// Also make sure you read this method's prologue above, it should help
-		// you. Especially the two HINTS in the prologue.
+		// If key already exists in the table with the same value, do nothing
+		if ((table[pos1] != null && table[pos1].getBucKey().equals(key) && table[pos1].getValue().equals(value)) ||
+				(table[pos2] != null && table[pos2].getBucKey().equals(key) && table[pos2].getValue().equals(value))) {
+			return;
+		}
 
-		return;
+		Bucket<K, V> newEntry = new Bucket<>(key, value);
+
+		for (int i = 0; i < CAPACITY; i++) {  // Up to CAPACITY swaps before detecting a cycle
+			// Try inserting at pos1 first
+			if (table[pos1] == null) {
+				table[pos1] = newEntry;
+				return;
+			}
+			// Evict existing entry
+			Bucket<K, V> displacedEntry = table[pos1];
+			table[pos1] = newEntry;
+			// Swap position
+			newEntry = displacedEntry;
+			pos1 = (hash1(newEntry.getBucKey()) == pos1) ? hash2(newEntry.getBucKey()) : hash1(newEntry.getBucKey());
+			// If the new position is empty, insert and return
+			if (table[pos1] == null) {
+				table[pos1] = newEntry;
+				return;
+			}
+		}
+		// If cycle detected after CAPACITY swaps, rehash
+		rehash();
+		put(newEntry.getBucKey(), newEntry.getValue());  // Reinsert evicted element
 	}
 
 
